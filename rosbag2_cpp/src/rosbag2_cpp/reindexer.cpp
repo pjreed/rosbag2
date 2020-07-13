@@ -26,25 +26,23 @@
 namespace rosbag2_cpp
 {
 
-Reader::Reader(std::unique_ptr<reader_interfaces::BaseReaderInterface> reader_impl)
-: reader_impl_(std::move(reader_impl))
+Reindexer::Reindexer(std::unique_ptr<reindexer_interface::BaseReindexerInterface> reindexer_impl)
+: reindexer_impl(std::move(reindexer_impl))
 {}
 
-Reader::~Reader()
-{
-  reader_impl_->reset();
-}
+Reindexer::~Reindexer(){}
 
-void Reader::open(
+void Reindexer::open(
   const StorageOptions & storage_options,
   const ConverterOptions & converter_options)
 {
-  reader_impl_->open(storage_options, converter_options);
+  reindexer_impl->open(storage_options, converter_options);
 }
 
-bool Reader::has_next()
+void Reindexer::reindex()
 {
-  return reader_impl_->has_next();
+  reindexer_impl->reindex();
 }
+
 
 } //namespace rosbag2_cpp
