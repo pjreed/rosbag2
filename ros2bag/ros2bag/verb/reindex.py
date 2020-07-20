@@ -18,6 +18,7 @@ import datetime
 import os
 
 from rclpy.qos import InvalidQoSProfileException
+from ros2bag.api import check_path_exists
 from ros2bag.api import convert_yaml_to_qos_profile
 from ros2bag.api import create_bag_directory
 from ros2bag.api import print_error
