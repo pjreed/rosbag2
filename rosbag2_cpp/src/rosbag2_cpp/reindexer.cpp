@@ -34,9 +34,9 @@ Reindexer::~Reindexer(){}
 
 void Reindexer::open(
   const StorageOptions & storage_options,
-  const ConverterOptions & converter_options)
+  const RecordOptions & record_options)
 {
-  reindexer_impl->open(storage_options, converter_options);
+  reindexer_impl->open(storage_options, record_options);
 }
 
 void Reindexer::reindex()

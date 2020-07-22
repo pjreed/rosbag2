@@ -109,6 +109,19 @@ void Rosbag2Transport::play(
   }
 }
 
+void  Rosbag2Transport::reindex(
+  const StorageOptions & storage_options, const RecordOptions & record_options)
+{
+  try {
+    reindexer_->open(storage_options, record_options);
+
+    Reindexer reindexer(reindexer_, transport_node);
+    reindexer.reindex(storage_options, record_options);
+  } catch (std::runtime_error & e) {
+    ROSBAG2_TRANSPORT_LOG_ERROR("Failed to record: &s", e.what());
+  }
+}
+
 void Rosbag2Transport::print_bag_info(const std::string & uri, const std::string & storage_id)
 {
   rosbag2_storage::BagMetadata metadata;

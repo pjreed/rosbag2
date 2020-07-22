@@ -143,7 +143,8 @@ void SequentialReindexer::init_metadata()
 
 void SequentailReindexer::reindex()
 {
-  init_metadata();  // Create a baseline to start from
+  // init_metadata();  // Create a baseline to start from
+  throw std::runtime_error("Successfully called Reindex!")
 
 
 }
