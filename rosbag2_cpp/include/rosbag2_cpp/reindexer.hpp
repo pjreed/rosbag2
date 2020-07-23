@@ -64,9 +64,9 @@ public:
    * Throws if the converter plugin does not exist.
    *
    * \param storage_options Options to configure the storage
-   * \param record_options Options to reflect how the bag file was recorded
+   * \param converter_options Options to reflect how the bag file was recorded
    */
-  void open(const StorageOptions & storage_options, const RecordOptions & record_options);
+  void open(const StorageOptions & storage_options, const ConverterOptions & converter_options);
 
   /**
    * Attempts to create a metadata file from the opened bag
@@ -77,7 +77,7 @@ public:
 
 private:
   std::unique_ptr<reindexer_interfaces::BaseReindexerInterface> reindexer_impl;
-}
+};
 
 } // namespace rosbag2_cpp
 

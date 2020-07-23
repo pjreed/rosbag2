@@ -30,6 +30,7 @@ namespace rosbag2_cpp
 class Info;
 class Reader;
 class Writer;
+class Reindexer;
 }  // namespace rosbag2_cpp
 
 namespace rosbag2_transport
@@ -93,7 +94,7 @@ public:
    * \param record_options Options regarding how the file was recorded (e.g. compression format)
    */
   ROSBAG2_TRANSPORT_PUBLIC
-  void reindex(const & StorageOptions & storage_options, const RecordOptions & record_options);
+  void reindex(const StorageOptions & storage_options, const RecordOptions & record_options);
 
 private:
   std::shared_ptr<Rosbag2Node> setup_node(
