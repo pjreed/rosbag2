@@ -57,9 +57,9 @@ Rosbag2Transport::Rosbag2Transport()
 Rosbag2Transport::Rosbag2Transport(
   std::shared_ptr<rosbag2_cpp::Reader> reader,
   std::shared_ptr<rosbag2_cpp::Writer> writer,
-  std::shared_ptr<rosbag2_cpp::Info> info
+  std::shared_ptr<rosbag2_cpp::Info> info,
   std::shared_ptr<rosbag2_cpp::Reindexer> reindexer)
-: reader_(std::move(reader)), writer_(std::move(writer)), info_(std::move(info), reindexer_(std::move(reindexer))) {}
+: reader_(std::move(reader)), writer_(std::move(writer)), info_(std::move(info)), reindexer_(std::move(reindexer)) {}
 
 void Rosbag2Transport::init()
 {
@@ -118,12 +118,10 @@ void  Rosbag2Transport::reindex(
   const StorageOptions & storage_options, const RecordOptions & record_options)
 {
   try {
-    reindexer_->open(storage_options, record_options);
-
-    Reindexer reindexer(reindexer_, transport_node);
-    reindexer.reindex(storage_options, record_options);
+    reindexer_->open(storage_options, {rmw_get_serialization_format(), record_options.rmw_serialization_format});
+    reindexer_->reindex();
   } catch (std::runtime_error & e) {
-    ROSBAG2_TRANSPORT_LOG_ERROR("Failed to record: &s", e.what());
+    ROSBAG2_TRANSPORT_LOG_ERROR("Failed to record: %s", e.what());
   }
 }
 
