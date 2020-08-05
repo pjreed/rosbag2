@@ -60,7 +60,7 @@ TEST_F(RosBag2PlayTestFixture, recorded_message_is_played_on_remapped_topic) {
   sub_->add_subscription<test_msgs::msg::BasicTypes>(remapped_topic, expected_number_of_messages);
   auto await_received_messages = sub_->spin_subscriptions();
 
-  rosbag2_transport::Rosbag2Transport rosbag2_transport(reader_, writer_, info_);
+  rosbag2_transport::Rosbag2Transport rosbag2_transport(reader_, writer_, info_, reindexer_);
 
   rosbag2_transport.play(
     storage_options_, play_options_);
