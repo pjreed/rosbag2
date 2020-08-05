@@ -45,7 +45,7 @@ namespace reindexers
 {
 
 class ROSBAG2_CPP_PUBLIC SequentialReindexer
-  : public ::rosbag2_cpp::reindexer_interface::BaseReindexerInterface
+  : public ::rosbag2_cpp::reindexer_interfaces::BaseReindexerInterface
 {
 public:
   SequentialReindexer(

@@ -30,7 +30,7 @@
 
 namespace rosbag2_cpp
 {
-namespace reindexer_interface
+namespace reindexer_interfaces
 {
 
 class ROSBAG2_CPP_PUBLIC BaseReindexerInterface
