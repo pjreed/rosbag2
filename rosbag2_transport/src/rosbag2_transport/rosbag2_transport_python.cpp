@@ -31,6 +31,8 @@
 #include "rosbag2_cpp/readers/sequential_reader.hpp"
 #include "rosbag2_cpp/writer.hpp"
 #include "rosbag2_cpp/writers/sequential_writer.hpp"
+#include "rosbag2_cpp/reindexer.hpp"
+#include "rosbag2_cpp/reindexers/sequential_reindexer.hpp"
 #include "rosbag2_storage/metadata_io.hpp"
 #include "rosbag2_transport/rosbag2_transport.hpp"
 #include "rosbag2_transport/record_options.hpp"
@@ -358,7 +360,7 @@ rosbag2_transport_reindex(PyObject * Py_UNUSED(self), PyObject * args, PyObject 
   char * char_serialization_fmt = nullptr;
   char * char_compression_fmt = nullptr;
   if (!PyArg_ParseTupleAndKeywords(
-    args, kwargs "ssss", const_cast<char **>(kwlist),
+    args, kwargs, "ssss", const_cast<char **>(kwlist),
     &char_uri,
     &char_storage_id,
     &char_serialization_fmt,
@@ -371,9 +373,9 @@ rosbag2_transport_reindex(PyObject * Py_UNUSED(self), PyObject * args, PyObject 
   storage_options.storage_id = std::string(char_storage_id);
   record_options.compression_format = std::string(char_compression_fmt);
 
-  record_options.rmw_serialization_format = std::string(serilization_format).empty() ?
+  record_options.rmw_serialization_format = std::string(char_serialization_fmt).empty() ?
     rmw_get_serialization_format() :
-    serilization_format;
+    char_serialization_fmt;
 
   // Specify defaults
   auto info = std::make_shared<rosbag2_cpp::Info>();
@@ -381,15 +383,17 @@ rosbag2_transport_reindex(PyObject * Py_UNUSED(self), PyObject * args, PyObject 
     std::make_unique<rosbag2_cpp::readers::SequentialReader>());
   auto reindexer = std::make_shared<rosbag2_cpp::Reindexer>(
     std::make_unique<rosbag2_cpp::reindexers::SequentialReindexer>());
-  std::shared_ptr<rosbag2_cpp::Writer> writer;
-  // Change writer based on recording options
-  if (record_options.compression_format == "zstd") {
-    writer = std::make_shared<rosbag2_cpp::Writer>(
-      std::make_unique<rosbag2_compression::SequentialCompressionWriter>(compression_options));
-  } else {
-    writer = std::make_shared<rosbag2_cpp::Writer>(
-      std::make_unique<rosbag2_cpp::writers::SequentialWriter>());
-  }
+  // std::shared_ptr<rosbag2_cpp::Writer> writer;
+  // // Change writer based on recording options
+  // if (record_options.compression_format == "zstd") {
+  //   writer = std::make_shared<rosbag2_cpp::Writer>(
+  //     std::make_unique<rosbag2_compression::SequentialCompressionWriter>(compression_options));
+  // } else {
+  //   writer = std::make_shared<rosbag2_cpp::Writer>(
+  //     std::make_unique<rosbag2_cpp::writers::SequentialWriter>());
+  // }
+  auto writer = std::make_shared<rosbag2_cpp::Writer>(
+    std::make_unique<rosbag2_cpp::writers::SequentialWriter>());
   
   rosbag2_transport::Rosbag2Transport transport(reader, writer, info, reindexer);
   transport.init();
