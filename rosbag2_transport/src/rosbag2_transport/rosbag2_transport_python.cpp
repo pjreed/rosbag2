@@ -421,6 +421,10 @@ static PyMethodDef rosbag2_transport_methods[] = {
     "info", reinterpret_cast<PyCFunction>(rosbag2_transport_info), METH_VARARGS | METH_KEYWORDS,
     "Print bag info"
   },
+  {
+    "reindex", reinterpret_cast<PyCFunction>(rosbag2_transport_reindex), METH_VARARGS | METH_KEYWORDS,
+    "Reindex bag"
+  },
   {nullptr, nullptr, 0, nullptr}  /* sentinel */
 };
 #if __GNUC__ >= 8
