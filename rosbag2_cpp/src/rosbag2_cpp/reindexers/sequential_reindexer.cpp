@@ -72,54 +72,36 @@ SequentialReindexer::~SequentialReindexer()
   reset();
 }
 
-void SequentialReindexer::open(
-  const StorageOptions & storage_options, const ConverterOptions & converter_options)
+void SequentialReindexer::reset()
 {
-  // If there is a metadata.yaml file present, load it.
-  // If not, let's ask the storage with the given URI for its metadata.
-  // This is necessary for non ROS2 bags (aka ROS1 legacy bags).
-  if (metadata_io_->metadata_file_exists(storage_options.uri)) {
-    metadata_ = metadata_io_->read_metadata(storage_options.uri);
-    if (metadata_.relative_file_paths.empty()) {
-      ROSBAG2_CPP_LOG_WARN("No file paths were found in metadata.");
-      return;
-    }
-
-    file_paths_ = details::resolve_relative_paths(
-      storage_options.uri, metadata_.relative_file_paths, metadata_.version);
-    current_file_iterator_ = file_paths_.begin();
-
-    storage_ = storage_factory_->open_read_only(
-      get_current_file(), storage_options.storage_id);
-    if (!storage_) {
-      throw std::runtime_error{"No storage could be initialized. Abort"};
-    }
-  } else {
-    storage_ = storage_factory_->open_read_only(
-      storage_options.uri, storage_options.storage_id);
-    if (!storage_) {
-      throw std::runtime_error{"No storage could be initialized. Abort"};
-    }
-    metadata_ = storage_->get_metadata();
-    if (metadata_.relative_file_paths.empty()) {
-      ROSBAG2_CPP_LOG_WARN("No file paths were found in metadata.");
-      return;
-    }
-    file_paths_ = metadata_.relative_file_paths;
-    current_file_iterator_ = file_paths_.begin();
+  if (storage_) {
+    storage_.reset();
   }
+}
+
+void SequentialReindexer::open(
+  const StorageOptions & storage_options)
+{
+  // Since this is a reindexing operation, assume that there is no metadata.yaml file.
+  // As such, ask the storage with the given URI for its metadata.
+  storage_ = storage_factory_->open_read_only(
+    storage_options.uri, storage_options.storage_id);
+  if (!storage_) {
+    throw std::runtime_error{"No storage could be initialized. Abort"};
+  }
+  metadata_ = storage_->get_metadata();
+  if (metadata_.relative_file_paths.empty()) {
+    ROSBAG2_CPP_LOG_WARN("No file paths were found in metadata.");
+    return;
+  }
+  file_paths_ = metadata_.relative_file_paths;
+  current_file_iterator_ = file_paths_.begin();
   auto topics = metadata_.topics_with_message_count;
   if (topics.empty()) {
     ROSBAG2_CPP_LOG_WARN("No topics were listed in metadata.");
     return;
   }
   fill_topics_metadata();
-
-  // Currently a bag file can only be played if all topics have the same serialization format.
-  check_topics_serialization_formats(topics);
-  check_converter_serialization_format(
-    converter_options.output_serialization_format,
-    topics[0].topic_metadata.serialization_format);
 }
 
 void SequentialReindexer::fill_topics_metadata()

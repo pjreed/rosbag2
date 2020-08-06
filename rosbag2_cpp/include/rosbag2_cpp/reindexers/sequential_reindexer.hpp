@@ -59,11 +59,13 @@ public:
   virtual ~SequentialReindexer();
 
   void open(
-    const StorageOptions & storage_options, const ConverterOptions & converter_options) override;
+    const StorageOptions & storage_options) override;
 
   void reindex() override;
 
   void fill_topics_metadata();
+
+  void reset();
 
 protected:
 

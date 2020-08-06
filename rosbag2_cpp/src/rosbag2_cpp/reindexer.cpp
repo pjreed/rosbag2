@@ -20,23 +20,23 @@
 #include <utility>
 #include <vector>
 
+#include "rosbag2_cpp/storage_options.hpp"
 #include "rosbag2_cpp/info.hpp"
 #include "rosbag2_cpp/reindexer_interfaces/base_reindexer_interface.hpp"
 
 namespace rosbag2_cpp
 {
 
-Reindexer::Reindexer(std::unique_ptr<reindexer_interface::BaseReindexerInterface> reindexer_impl)
+Reindexer::Reindexer(std::unique_ptr<reindexer_interfaces::BaseReindexerInterface> reindexer_impl)
 : reindexer_impl(std::move(reindexer_impl))
 {}
 
 Reindexer::~Reindexer(){}
 
 void Reindexer::open(
-  const StorageOptions & storage_options,
-  const RecordOptions & record_options)
+  const StorageOptions & storage_options)
 {
-  reindexer_impl->open(storage_options, record_options);
+  reindexer_impl->open(storage_options);
 }
 
 void Reindexer::reindex()

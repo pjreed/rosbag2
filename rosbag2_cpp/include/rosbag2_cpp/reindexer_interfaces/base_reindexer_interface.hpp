@@ -39,7 +39,7 @@ public:
   virtual ~BaseReindexerInterface() {}
 
   virtual void open(
-    const StorageOptions & storage_options, const ConverterOptions & converter_options) = 0;
+    const StorageOptions & storage_options) = 0;
 
   virtual void reindex() = 0;
 };

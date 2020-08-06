@@ -64,9 +64,8 @@ public:
    * Throws if the converter plugin does not exist.
    *
    * \param storage_options Options to configure the storage
-   * \param converter_options Options to reflect how the bag file was recorded
    */
-  void open(const StorageOptions & storage_options, const ConverterOptions & converter_options);
+  void open(const StorageOptions & storage_options);
 
   /**
    * Attempts to create a metadata file from the opened bag
