@@ -115,10 +115,10 @@ void Rosbag2Transport::play(
 }
 
 void  Rosbag2Transport::reindex(
-  const StorageOptions & storage_options, const RecordOptions & record_options)
+  const StorageOptions & storage_options)
 {
   try {
-    reindexer_->open(storage_options, {rmw_get_serialization_format(), record_options.rmw_serialization_format});
+    reindexer_->open(storage_options);
     reindexer_->reindex();
   } catch (std::runtime_error & e) {
     ROSBAG2_TRANSPORT_LOG_ERROR("Failed to record: %s", e.what());

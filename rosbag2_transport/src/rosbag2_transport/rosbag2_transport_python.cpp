@@ -397,7 +397,7 @@ rosbag2_transport_reindex(PyObject * Py_UNUSED(self), PyObject * args, PyObject 
   
   rosbag2_transport::Rosbag2Transport transport(reader, writer, info, reindexer);
   transport.init();
-  transport.reindex(storage_options, record_options);
+  transport.reindex(storage_options);
   transport.shutdown();
 
   Py_RETURN_NONE;

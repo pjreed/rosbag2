@@ -57,6 +57,11 @@ std::vector<std::string> resolve_relative_paths(
 }
 }  // namespace details
 
+std::string strip_parent_path(const std::string & relative_path)
+{
+  return rcpputils::fs::path(relative_path).filename().string();
+}
+
 SequentialReindexer::SequentialReindexer(
   std::unique_ptr<rosbag2_storage::StorageFactoryInterface> storage_factory,
   std::shared_ptr<SerializationFormatConverterFactoryInterface> converter_factory,
@@ -123,10 +128,10 @@ void SequentialReindexer::init_metadata()
   metadata_.relative_file_paths = {strip_parent_path(storage_->get_relative_file_path())};
 }
 
-void SequentailReindexer::reindex()
+void SequentialReindexer::reindex()
 {
   // init_metadata();  // Create a baseline to start from
-  throw std::runtime_error("Successfully called Reindex!")
+  throw std::runtime_error("Successfully called Reindex!");
 
 
 }
