@@ -121,7 +121,7 @@ void  Rosbag2Transport::reindex(
     reindexer_->open(storage_options);
     reindexer_->reindex();
   } catch (std::runtime_error & e) {
-    ROSBAG2_TRANSPORT_LOG_ERROR("Failed to record: %s", e.what());
+    ROSBAG2_TRANSPORT_LOG_ERROR("Failed to reindex: %s", e.what());
   }
 }
 
