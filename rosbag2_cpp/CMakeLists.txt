@@ -33,6 +33,14 @@ if(NOT DISABLE_SANITIZERS AND CMAKE_COMPILER_IS_GNUCXX)
   endif()
 endif()
 
+# Set Boost options
+set(Boost_USE_STATIC_LIBS OFF)
+set(Boost_USE_MULTITHREADED OFF)
+set(Boost_USE_STATIC_RUNTIME OFF)
+
+# Enable Boost
+find_package(Boost REQUIRED COMPONENTS filesystem)
+
 find_package(ament_cmake REQUIRED)
 find_package(ament_index_cpp REQUIRED)
 find_package(pluginlib REQUIRED)
@@ -69,6 +77,8 @@ ament_target_dependencies(${PROJECT_NAME}
   rosidl_typesupport_cpp
   rosidl_typesupport_introspection_cpp
 )
+
+target_link_libraries(${PROJECT_NAME} PUBLIC Boost::filesystem)
 
 target_include_directories(${PROJECT_NAME}
   PUBLIC

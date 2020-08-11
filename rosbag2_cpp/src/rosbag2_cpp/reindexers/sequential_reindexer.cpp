@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <boost/filesystem.hpp>
+#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -84,16 +86,50 @@ void SequentialReindexer::reset()
   }
 }
 
+std::vector<std::string> get_database_files(const StorageOptions & storage_options)
+{
+  auto uri = storage_options.uri;
+
+  // Look in the uri directory to see what database files are there
+  std::vector<std::string> output;
+  for(auto& p_: boost::filesystem::directory_iterator(uri))
+  {
+    // We are ONLY interested in database files
+    if (p_.path().extension() != ".db3")
+    {
+      continue;
+    }
+    std::cout << p_.path() << "\n";  // Debugging
+
+    output.emplace_back(p_.path().c_str());
+  }
+
+  return output;
+
+}
+
+// std::string get_first_bagfile(const StorageOptions & storage_options)
+// {
+//   auto uri = storage_options.uri;
+
+//   // First job is to find the database files in the bag
+
+
+// }
+
 void SequentialReindexer::open(
   const StorageOptions & storage_options)
 {
+  auto files = get_database_files(storage_options);
   // Since this is a reindexing operation, assume that there is no metadata.yaml file.
   // As such, ask the storage with the given URI for its metadata.
+  std::cout << "Running storage_factory_->open_read_only()\n";
   storage_ = storage_factory_->open_read_only(
     storage_options.uri, storage_options.storage_id);
   if (!storage_) {
     throw std::runtime_error{"No storage could be initialized. Abort"};
   }
+  std::cout << "Running storage_->get_metadata()\n";
   metadata_ = storage_->get_metadata();
   if (metadata_.relative_file_paths.empty()) {
     ROSBAG2_CPP_LOG_WARN("No file paths were found in metadata.");

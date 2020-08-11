@@ -15,6 +15,7 @@
 #ifndef ROSBAG2_CPP__READERS__SEQUENTIAL_REINDEXER_HPP_
 #define ROSBAG2_CPP__READERS__SEQUENTIAL_REINDEXER_HPP_
 
+#include <boost/filesystem.hpp>
 #include <memory>
 #include <string>
 #include <vector>
@@ -80,6 +81,8 @@ protected:
 
 private:
   std::shared_ptr<SerializationFormatConverterFactoryInterface> converter_factory_{};
+
+  std::vector<std::string> get_database_files(const StorageOptions & storage_options);
   
   // Prepares the metadata by setting initial values.
   void init_metadata();
