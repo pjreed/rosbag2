@@ -66,7 +66,7 @@ add_library(${PROJECT_NAME} SHARED
   src/rosbag2_cpp/reindexer.cpp
   src/rosbag2_cpp/reindexers/sequential_reindexer.cpp)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC Boost::filesystem)
+target_link_libraries(${PROJECT_NAME} Boost::filesystem)
 
 ament_target_dependencies(${PROJECT_NAME}
   ament_index_cpp
