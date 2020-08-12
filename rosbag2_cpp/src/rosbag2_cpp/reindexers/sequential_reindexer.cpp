@@ -86,7 +86,7 @@ void SequentialReindexer::reset()
   }
 }
 
-std::vector<std::string> get_database_files(const StorageOptions & storage_options)
+std::vector<std::string> SequentialReindexer::get_database_files(const StorageOptions & storage_options)
 {
   auto uri = storage_options.uri;
 
